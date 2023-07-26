@@ -6,77 +6,59 @@ It uses [Unkey](https://github.com/unkeyed/unkey/) to provision & manage API key
 
 ## Endpoints
 
-`/signup`: Sign up for an API key. Returns a JSON object with the API key.
+1. `/signup`: Sign up for an API key. Returns a JSON object with the API key.
+    
 
-It validates the email & provisions & returns an API key. The keys is then used to authenticate the OCR endpoints.
+It validates the email and provisions and returns an API key. The keys are then used to authenticate the OCR endpoints.
 
 Type: `POST`
 
 Body:
-| | | | 
-| --- | --- | --- |
-| `email` | string | Email address to sign up with |
-| `name` | string | Name of user |
-| | | | 
+
+<table><tbody><tr><td colspan="1" rowspan="1"><p><code>email</code></p></td><td colspan="1" rowspan="1"><p>string</p></td><td colspan="1" rowspan="1"><p>Email address to sign up with</p></td></tr><tr><td colspan="1" rowspan="1"><p><code>name</code></p></td><td colspan="1" rowspan="1"><p>string</p></td><td colspan="1" rowspan="1"><p>Name of user</p></td></tr></tbody></table>
 
 Returns:
-| | | |
-| --- | --- | --- |
-| `key` | string | API key |
-| `keyId` | string | API key ID |
-| | | | 
 
-`/upload`: Upload an image to perform OCR on. Returns a JSON object with the OCR results.
+<table><tbody><tr><td colspan="1" rowspan="1"><p><code>key</code></p></td><td colspan="1" rowspan="1"><p>string</p></td><td colspan="1" rowspan="1"><p>API key</p></td></tr><tr><td colspan="1" rowspan="1"><p><code>keyId</code></p></td><td colspan="1" rowspan="1"><p>string</p></td><td colspan="1" rowspan="1"><p>API key ID</p></td></tr></tbody></table>
 
-It uses the API key to authenticate the request. It then performs OCR on the image & returns the results.
+2. `/upload`: Upload an image to perform OCR on. Returns a JSON object with the OCR results.   
+It uses the API key to authenticate the request. It then performs OCR on the image and returns the results.
 
 Type: `POST`
 
 Headers:
-| | | |
-| --- | --- | --- |
-| `Bearer` | string | API key in Bearer auth |
-| | | |
+
+<table><tbody><tr><td colspan="1" rowspan="1"><p><code>Bearer</code></p></td><td colspan="1" rowspan="1"><p>string</p></td><td colspan="1" rowspan="1"><p>API key in Bearer auth</p></td></tr></tbody></table>
 
 Body:
-| | | |
-| --- | --- | --- |
-| `sampleFile` | file | Image file |
-| | | |
+
+<table><tbody><tr><td colspan="1" rowspan="1"><p><code>sampleFile</code></p></td><td colspan="1" rowspan="1"><p>file</p></td><td colspan="1" rowspan="1"><p>Image file</p></td></tr></tbody></table>
 
 Returns:
-| | | |
-| --- | --- | --- |
-| `text` | string, null | OCR results |
-| `error` | string, null | Error if any |
-| | | |
 
-`/uploadBase64`: Upload a base64 encoded image to perform OCR on. Returns a JSON object with the OCR results.
+<table><tbody><tr><td colspan="1" rowspan="1"><p><code>text</code></p></td><td colspan="1" rowspan="1"><p>string, null</p></td><td colspan="1" rowspan="1"><p>OCR results</p></td></tr><tr><td colspan="1" rowspan="1"><p><code>error</code></p></td><td colspan="1" rowspan="1"><p>string, null</p></td><td colspan="1" rowspan="1"><p>Error if any</p></td></tr></tbody></table>
 
-It uses the API key to authenticate the request. It then performs OCR on the image & returns the results.
+3. `/uploadBase64`: Upload a base64 encoded image to perform OCR on. Returns a JSON object with the OCR results.
+    
+
+It uses the API key to authenticate the request. It then performs OCR on the image and returns the results.
 
 Type: `POST`
 
 Headers:
-| | | |
-| --- | --- | --- |
-| `Bearer` | string | API key in Bearer auth |
-| | | |
+
+<table><tbody><tr><td colspan="1" rowspan="1"><p><code>Bearer</code></p></td><td colspan="1" rowspan="1"><p>string</p></td><td colspan="1" rowspan="1"><p>API key in Bearer auth</p></td></tr></tbody></table>
 
 Body:
-| | | |
-| --- | --- | --- |
-| `imageBase64` | string | Base64 encoded image |
-| | | |
+
+<table><tbody><tr><td colspan="1" rowspan="1"><p><code>imageBase64</code></p></td><td colspan="1" rowspan="1"><p>string</p></td><td colspan="1" rowspan="1"><p>Base64 encoded image</p></td></tr></tbody></table>
 
 Returns:
-| | | |
-| --- | --- | --- |
-| `text` | string, null | OCR results |
-| `error` | string, null | Error if any |
-| | | |
 
-`/upgradeUser`: Upgrade a user to a paid plan.
+<table><tbody><tr><td colspan="1" rowspan="1"><p><code>text</code></p></td><td colspan="1" rowspan="1"><p>string, null</p></td><td colspan="1" rowspan="1"><p>OCR results</p></td></tr><tr><td colspan="1" rowspan="1"><p><code>error</code></p></td><td colspan="1" rowspan="1"><p>string, null</p></td><td colspan="1" rowspan="1"><p>Error if any</p></td></tr></tbody></table>
+
+4. `/upgradeUser`: Upgrade a user to a paid plan.
+    
 
 Suppose the user upgrades to a paid plan and we have to allow the user 100 requests per minute. We can do this by updating the user's API key.
 
@@ -85,14 +67,12 @@ Type: `POST`
 Headers: None
 
 Body:
-| | | |
-| --- | --- | --- |
-| `email` | string | Email address of user |
-| `transactionId` | string | Imaginary transaction id |
-| `apiKeyId` | string | Id of the API key to be updated. Id is returned when a key is created. |
-| | | |
+
+<table><tbody><tr><td colspan="1" rowspan="1"><p><code>email</code></p></td><td colspan="1" rowspan="1"><p>string</p></td><td colspan="1" rowspan="1"><p>Email address of the user</p></td></tr><tr><td colspan="1" rowspan="1"><p><code>transactionId</code></p></td><td colspan="1" rowspan="1"><p>string</p></td><td colspan="1" rowspan="1"><p>Imaginary transaction id</p></td></tr><tr><td colspan="1" rowspan="1"><p><code>apiKeyId</code></p></td><td colspan="1" rowspan="1"><p>string</p></td><td colspan="1" rowspan="1"><p>Id of the API key to be updated. It is returned when a key is created.</p></td></tr></tbody></table>
 
 Returns: None
+
+---
 
 ## Running locally
 1. Clone the repo
@@ -150,9 +130,9 @@ Consider the following example:
 
 Suppose you have an API that allows 100 requests per minute. You can set the following rate limit:
 - `type`: `fast` or `consistent`
-- `limit`: `100` // 100 requests per minute
-- `refill`: `100` // Refill 100 requests per minute
-- `refillInterval`: `60000` // Refill every minute
+- `limit`: `100` -> 100 requests per minute
+- `refill`: `100` -> Refill 100 requests per minute
+- `refillInterval`: `60000` -> Refill every minute
 
 
 ### Key verification
@@ -171,7 +151,7 @@ Let's understand the response we get from the Unkey API when we verify a key.
         "email": "john@example.com",
         "name": "John Doe"
     },
-    "expires": 1696870038000,
+    "expires": 1693068350000, // 30 days since 26/07/2023
     "ratelimit": {
         "limit": 1,
         "remaining": 0,

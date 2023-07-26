@@ -47,11 +47,11 @@ app.post("/signUp", async (req: Request, res: Response) => {
 
   // Imaginary name and email validation
 
-  var myHeaders = new Headers();
+  const myHeaders = new Headers();
   myHeaders.append("Authorization", `Bearer ${process.env.UNKEY_ROOT_KEY}`);
   myHeaders.append("Content-Type", "application/json");
 
-  var raw = JSON.stringify({
+  const raw = JSON.stringify({
     apiId: process.env.UNKEY_API_ID,
     prefix: "ocr",
     byteLength: 16,
@@ -60,7 +60,7 @@ app.post("/signUp", async (req: Request, res: Response) => {
       name: name,
       email: email,
     },
-    expires: 1696870038000,
+    expires: 1693068350000, // 30 days since 26/07/2023
     ratelimit: {
       type: "fast",
       limit: 1,
@@ -96,11 +96,11 @@ app.post("/upgradeUser", async (req: Request, res: Response) => {
   // Imaginary transactionId and email validation. Let's imagine the user upgraded to a paid plan.
   // Now we have to increase the usage quota of the user. We can do that by updating the key.
 
-  var myHeaders = new Headers();
+  const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
   myHeaders.append("Authorization", "Bearer unkey_3Zn5Hzna4FoCobBNgCbfNtit");
 
-  var raw = JSON.stringify({
+  const raw = JSON.stringify({
     "keyId": apiKeyId,
     "ratelimit": {
       "type": "fast",

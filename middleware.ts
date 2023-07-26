@@ -7,10 +7,10 @@ const verifyApiKey = async (req:Request, res:Response, next:NextFunction) => {
     const token = authHeader.split(" ")[1].trim();
 
     try {
-      var myHeaders = new Headers();
+      const myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 
-      var raw = JSON.stringify({
+      const raw = JSON.stringify({
         key: token,
       });
 
@@ -24,8 +24,6 @@ const verifyApiKey = async (req:Request, res:Response, next:NextFunction) => {
         },
       );
       const verifyKeyResponseJson = await verifyKeyResponse.json();
-
-      console.log(verifyKeyResponseJson);
 
       if (
         !verifyKeyResponseJson.valid &&
