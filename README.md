@@ -76,6 +76,24 @@ Returns:
 | `error` | string, null | Error if any |
 | | | |
 
+`/upgradeUser`: Upgrade a user to a paid plan.
+
+Suppose the user upgrades to a paid plan and we have to allow the user 100 requests per minute. We can do this by updating the user's API key.
+
+Type: `POST`
+
+Headers: None
+
+Body:
+| | | |
+| --- | --- | --- |
+| `email` | string | Email address of user |
+| `transactionId` | string | Imaginary transaction id |
+| `apiKeyId` | string | Id of the API key to be updated. Id is returned when a key is created. |
+| | | |
+
+Returns: None
+
 ## Running locally
 1. Clone the repo
 2. Run `npm install`. You can use `yarn` or `pnpm` as well.
