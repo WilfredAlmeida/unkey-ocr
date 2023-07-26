@@ -1,8 +1,9 @@
-const express = require("express");
-const fileUpload = require("express-fileupload");
-const Tesseract = require("tesseract.js");
-const verifyApiKey = require("./middleware");
-require("dotenv").config();
+import express, { Request, Response } from "express";
+import fileUpload from "express-fileupload";
+import Tesseract from "tesseract.js";
+import verifyApiKey from "./middleware.ts";
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
 
@@ -17,18 +18,20 @@ app.get("/", (_, res) => {
     </form>`);
 });
 
-app.post("/upload", [verifyApiKey], async (req, res) => {
+app.post("/upload", [verifyApiKey], async (req: Request, res: Response) => {
   const { sampleFile } = req.files;
   if (!sampleFile) return res.status(400).send("No files were uploaded.");
 
-  const { data, error } = await doOcr(sampleFile.data);
+  const uploadedFile = JSON.parse(JSON.stringify(sampleFile));
+
+  const { data, error } = await doOcr(uploadedFile.data.data);
 
   if (data) return res.status(200).json({ text: data.text, error: null });
 
   res.status(400).json({ error: error, text: null });
 });
 
-app.post("/uploadBase64", [verifyApiKey], async (req, res) => {
+app.post("/uploadBase64", [verifyApiKey], async (req: Request, res: Response) => {
   const { imageBase64 } = req.body;
   if (!imageBase64) return res.status(400).send("Image not found.");
 
@@ -39,7 +42,7 @@ app.post("/uploadBase64", [verifyApiKey], async (req, res) => {
   res.status(400).json({ error: error, text: null });
 });
 
-app.post("/signUp", async (req, res) => {
+app.post("/signUp", async (req: Request, res: Response) => {
   const { name = "John Doe", email = "john@example.com" } = req.body;
 
   // Imaginary name and email validation
@@ -66,16 +69,15 @@ app.post("/signUp", async (req, res) => {
     },
   });
 
-  var requestOptions = {
-    method: "POST",
-    headers: myHeaders,
-    body: raw,
-    redirect: "follow",
-  };
 
   const createKeyResponse = await fetch(
     "https://api.unkey.dev/v1/keys",
-    requestOptions,
+    {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    },
   );
   const createKeyResponseJson = await createKeyResponse.json();
 
@@ -87,7 +89,7 @@ app.post("/signUp", async (req, res) => {
   return res.status(200).json({ keys: [createKeyResponseJson], error: null });
 });
 
-app.post("/upgradeUser", async (req, res) => {
+app.post("/upgradeUser", async (req: Request, res: Response) => {
 
   const { transactionId, email, apiKeyId } = req.body;
 
@@ -95,31 +97,30 @@ app.post("/upgradeUser", async (req, res) => {
   // Now we have to increase the usage quota of the user. We can do that by updating the key.
 
   var myHeaders = new Headers();
-myHeaders.append("Content-Type", "application/json");
-myHeaders.append("Authorization", "Bearer unkey_3Zn5Hzna4FoCobBNgCbfNtit");
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", "Bearer unkey_3Zn5Hzna4FoCobBNgCbfNtit");
 
-var raw = JSON.stringify({
-  "keyId": apiKeyId,
-  "ratelimit": {
-    "type": "fast",
-    "limit": 100,
-    "refillRate": 100,
-    "refillInterval": 60000
-  }
-});
+  var raw = JSON.stringify({
+    "keyId": apiKeyId,
+    "ratelimit": {
+      "type": "fast",
+      "limit": 100,
+      "refillRate": 100,
+      "refillInterval": 60000
+    }
+  });
 
-var requestOptions = {
-  method: 'PUT',
-  headers: myHeaders,
-  body: raw,
-  redirect: 'follow'
-};
 
-const updateKeyRequest = await fetch("https://api.unkey.dev/v1/keys/key_5KCLmfb2HY5czAfmEFNP3h", requestOptions)
+  const updateKeyRequest = await fetch("https://api.unkey.dev/v1/keys/key_5KCLmfb2HY5czAfmEFNP3h", {
+    method: 'PUT',
+    headers: myHeaders,
+    body: raw,
+    redirect: 'follow'
+  })
 
-if(updateKeyRequest.status !== 200) return res.status(400).json({message: "Something went wrong"})
+  if (updateKeyRequest.status !== 200) return res.status(400).json({ message: "Something went wrong" })
 
-return res.status(200).json({message: "User upgraded successfully"})
+  return res.status(200).json({ message: "User upgraded successfully" })
 
 
 });
