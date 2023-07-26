@@ -1,4 +1,7 @@
-const verifyApiKey = async (req, res, next) => {
+import { Request, Response, NextFunction } from "express";
+
+
+const verifyApiKey = async (req:Request, res:Response, next:NextFunction) => {
   const authHeader = req.headers.authorization;
   if (authHeader) {
     const token = authHeader.split(" ")[1].trim();
@@ -11,16 +14,14 @@ const verifyApiKey = async (req, res, next) => {
         key: token,
       });
 
-      var requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
-      };
-
       const verifyKeyResponse = await fetch(
         "https://api.unkey.dev/v1/keys/verify",
-        requestOptions,
+        {
+          method: "POST",
+          headers: myHeaders,
+          body: raw,
+          redirect: "follow",
+        },
       );
       const verifyKeyResponseJson = await verifyKeyResponse.json();
 
@@ -37,7 +38,7 @@ const verifyApiKey = async (req, res, next) => {
 
       next();
     } catch (err) {
-      logger.info("ERROR: ", err);
+      console.log("ERROR: ", err);
       return res.status(401).json({ message: "Unauthorized" });
     }
   } else {
@@ -45,4 +46,4 @@ const verifyApiKey = async (req, res, next) => {
   }
 };
 
-module.exports = verifyApiKey;
+export default verifyApiKey;
