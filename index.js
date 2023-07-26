@@ -87,6 +87,43 @@ app.post("/signUp", async (req, res) => {
   return res.status(200).json({ keys: [createKeyResponseJson], error: null });
 });
 
+app.post("/upgradeUser", async (req, res) => {
+
+  const { transactionId, email, apiKeyId } = req.body;
+
+  // Imaginary transactionId and email validation. Let's imagine the user upgraded to a paid plan.
+  // Now we have to increase the usage quota of the user. We can do that by updating the key.
+
+  var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+myHeaders.append("Authorization", "Bearer unkey_3Zn5Hzna4FoCobBNgCbfNtit");
+
+var raw = JSON.stringify({
+  "keyId": apiKeyId,
+  "ratelimit": {
+    "type": "fast",
+    "limit": 100,
+    "refillRate": 100,
+    "refillInterval": 60000
+  }
+});
+
+var requestOptions = {
+  method: 'PUT',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+const updateKeyRequest = await fetch("https://api.unkey.dev/v1/keys/key_5KCLmfb2HY5czAfmEFNP3h", requestOptions)
+
+if(updateKeyRequest.status !== 200) return res.status(400).json({message: "Something went wrong"})
+
+return res.status(200).json({message: "User upgraded successfully"})
+
+
+});
+
 const doOcr = async (image) => {
   try {
     const { data } = await Tesseract.recognize(image, "spa+eng", {
