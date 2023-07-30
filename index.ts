@@ -11,11 +11,7 @@ app.use(fileUpload());
 app.use(express.json());
 
 app.get("/", (_, res) => {
-  res.send(`
-    <form action='/upload' method='post' encType="multipart/form-data">
-      <input type="file" name="sampleFile" />
-      <input type='submit' value='Upload!' />
-    </form>`);
+  res.send(`Hello World!`);
 });
 
 app.post("/upload", [verifyApiKey], async (req: Request, res: Response) => {
@@ -93,20 +89,22 @@ app.post("/upgradeUser", async (req: Request, res: Response) => {
 
   const { transactionId, email, apiKeyId } = req.body;
 
-  // Imaginary transactionId and email validation. Let's imagine the user upgraded to a paid plan.
-  // Now we have to increase the usage quota of the user. We can do that by updating the key.
+  // Imaginary transactionId and email validation.
+  // Let's imagine the user upgraded to a paid plan.
+  // Now we have to increase the usage quota of the user.
+  // We can do that by updating the key.
 
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
-  myHeaders.append("Authorization", "Bearer unkey_3Zn5Hzna4FoCobBNgCbfNtit");
+  myHeaders.append("Authorization", `Bearer ${process.env.UNKEY_ROOT_KEY}`);
 
   const raw = JSON.stringify({
     "keyId": apiKeyId,
     "ratelimit": {
       "type": "fast",
-      "limit": 100,
-      "refillRate": 100,
-      "refillInterval": 60000
+      "limit": 10000,
+      "refillRate": 10000,
+      "refillInterval": 2592000000
     }
   });
 
